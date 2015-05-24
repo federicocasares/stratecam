@@ -179,7 +179,7 @@ private function UpdatePosition() {
 	transform.Translate(Vector3.back * currentCameraDistance);
 	
 	if (adaptToTerrainHeight && terrain != null) {
-		transform.position.y = Mathf.Max(terrain.SampleHeight(transform.position) + 10.0f, transform.position.y);
+		transform.position.y = Mathf.Max(terrain.SampleHeight(transform.position) + terrain.transform.position.y + 10.0f, transform.position.y);
 	}
 }
 
