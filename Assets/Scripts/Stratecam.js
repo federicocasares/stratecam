@@ -149,8 +149,7 @@ private function UpdateRotation() {
 	}
 	
 	transform.localEulerAngles.y = transform.localEulerAngles.y + deltaAngleH * Time.deltaTime * rotationSpeed;
-	transform.localEulerAngles.x = transform.localEulerAngles.x + deltaAngleV * Time.deltaTime * rotationSpeed;
-	transform.localEulerAngles.x = Mathf.Min(80.0f, Mathf.Max(5.0f, transform.localEulerAngles.x));
+	transform.localEulerAngles.x = Mathf.Min(80.0f, Mathf.Max(5.0f, transform.localEulerAngles.x + deltaAngleV * Time.deltaTime * rotationSpeed));
 }
 
 private function UpdateZooming() {
