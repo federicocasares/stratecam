@@ -28,6 +28,10 @@ public class StrateCamC : MonoBehaviour
     public bool smoothing = true;
     public bool allowDoubleClickMovement = false;
 
+    public bool allowScreenEdgeMovement = true;
+    public int screenEdgeSize = 10;
+    public float screenEdgeSpeed = 1.0f;
+
     public GameObject objectToFollow;
     public Vector3 cameraTarget;
 
@@ -105,19 +109,38 @@ public class StrateCamC : MonoBehaviour
             //! rewrite to adress xyz seperatly
             if (Input.GetKey(KeyCode.A))
             {
-                moveVector += new Vector3(-1, 0, 0);
+                moveVector.x -= 1;
             }
             if (Input.GetKey(KeyCode.S))
             {
-                moveVector += new Vector3(0, 0, -1);
+                moveVector.z -= 1;
             }
             if (Input.GetKey(KeyCode.D))
             {
-                moveVector += new Vector3(1, 0, 0);
+                moveVector.x += 1;
             }
             if (Input.GetKey(KeyCode.W))
             {
-                moveVector += new Vector3(0, 0, 1);
+                moveVector.z += 1;
+            }
+        }
+        if (allowScreenEdgeMovement)
+        {
+            if (Input.mousePosition.x < screenEdgeSize)
+            {
+                moveVector.x -= screenEdgeSpeed;
+            }
+            else if (Input.mousePosition.x > Screen.width - screenEdgeSize)
+            {
+                moveVector.x += screenEdgeSpeed;
+            }
+            if (Input.mousePosition.y < screenEdgeSize)
+            {
+                moveVector.z -= screenEdgeSpeed;
+            }
+            else if (Input.mousePosition.y > Screen.height - screenEdgeSize)
+            {
+                moveVector.z += screenEdgeSpeed;
             }
         }
 
