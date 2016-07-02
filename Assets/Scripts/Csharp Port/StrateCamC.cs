@@ -57,7 +57,7 @@ public class StrateCamC : MonoBehaviour
     {
         if (allowDoubleClickMovement)
         {
-            doubleClickDetector.Update();
+            //doubleClickDetector.Update();
             UpdateDoubleClick();
         }
         UpdatePanning();
