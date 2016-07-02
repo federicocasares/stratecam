@@ -26,6 +26,10 @@ public var correctZoomingOutRatio : boolean = true;
 public var smoothing : boolean = true;
 public var allowDoubleClickMovement : boolean = false;
 
+public var allowScreenEdgeMovement : boolean = true;
+public var screenEdgeSize : int = 10;
+public var screenEdgeSpeed : float = 1.0f;
+
 public var objectToFollow : GameObject;
 public var cameraTarget : Vector3;
 
@@ -71,12 +75,12 @@ function Follow(gameObjectToFollow : GameObject) {
 private function UpdateDoubleClick() {
 	if (doubleClickDetector.IsDoubleClick() && terrain && terrain.GetComponent(Collider)) {
 		var cameraTargetY = cameraTarget.y;
-		
+
 		var collider : Collider = terrain.GetComponent(Collider);
 		var ray : Ray = Camera.main.ScreenPointToRay(Input.mousePosition);
 		var hit : RaycastHit;
 		var pos : Vector3;
-		
+
 		if (collider.Raycast(ray, hit, Mathf.Infinity)) {
 			pos = hit.point;
 			pos.y = cameraTargetY;
@@ -90,36 +94,50 @@ private function UpdatePanning() {
 	if (useKeyboardInput) {
 		if (Input.GetKey(KeyCode.A)) {
 			moveVector += Vector3(-1, 0, 0);
-		} 
+		}
 		if (Input.GetKey(KeyCode.S)) {
 			moveVector += Vector3(0, 0, -1);
-		} 
+		}
 		if (Input.GetKey(KeyCode.D)) {
 			moveVector += Vector3(1, 0, 0);
-		} 
+		}
 		if (Input.GetKey(KeyCode.W)) {
 			moveVector += Vector3(0, 0, 1);
 		}
 	}
-	
+
+    if (allowScreenEdgeMovement) {
+        if (Input.mousePosition.x < screenEdgeSize) {
+            moveVector.x -= screenEdgeSpeed;
+        } else if (Input.mousePosition.x > Screen.width - screenEdgeSize) {
+            moveVector.x += screenEdgeSpeed;
+        }
+
+        if (Input.mousePosition.y < screenEdgeSize) {
+            moveVector.z -= screenEdgeSpeed;
+        } else if (Input.mousePosition.y > Screen.height - screenEdgeSize) {
+            moveVector.z += screenEdgeSpeed;
+        }
+    }
+
 	if (useMouseInput) {
 		if (Input.GetMouseButton(2) && Input.GetKey(KeyCode.LeftShift)) {
 			var deltaMousePos : Vector3 = (Input.mousePosition - lastMousePos);
 			moveVector += Vector3(-deltaMousePos.x, 0, -deltaMousePos.y) * mousePanMultiplier;
-		}	
+		}
 	}
-	
+
 	if (moveVector != Vector3.zero) {
 		objectToFollow = null;
 		doingAutoMovement = false;
 	}
-	
+
 	var effectivePanSpeed = moveVector;
 	if (smoothing) {
 		effectivePanSpeed = Vector3.Lerp(lastPanSpeed, moveVector, smoothingFactor);
 		lastPanSpeed = effectivePanSpeed;
 	}
-	
+
 	var oldRotation : float = transform.localEulerAngles.x;
 	transform.localEulerAngles.x = 0.0f;
 	var panMultiplier : float = increaseSpeedWhenZoomedOut ? (Mathf.Sqrt(currentCameraDistance)) : 1.0f;
@@ -130,16 +148,16 @@ private function UpdatePanning() {
 private function UpdateRotation() {
 	var deltaAngleH : float = 0.0f;
 	var deltaAngleV : float = 0.0f;
-	
+
 	if (useKeyboardInput) {
 		if (Input.GetKey(KeyCode.Q)) {
 			deltaAngleH = 1.0f;
-		} 
+		}
 		if (Input.GetKey(KeyCode.E)) {
 			deltaAngleH = -1.0f;
-		} 
+		}
 	}
-	
+
 	if (useMouseInput) {
 		if (Input.GetMouseButton(2) && !Input.GetKey(KeyCode.LeftShift)) {
 			var deltaMousePos : Vector3 = (Input.mousePosition - lastMousePos);
@@ -147,7 +165,7 @@ private function UpdateRotation() {
 			deltaAngleV -= deltaMousePos.y * mouseRotationMultiplier;
 		}
 	}
-	
+
 	transform.localEulerAngles.y = transform.localEulerAngles.y + deltaAngleH * Time.deltaTime * rotationSpeed;
 	transform.localEulerAngles.x = Mathf.Min(80.0f, Mathf.Max(5.0f, transform.localEulerAngles.x + deltaAngleV * Time.deltaTime * rotationSpeed));
 }
@@ -157,10 +175,10 @@ private function UpdateZooming() {
 	if (useKeyboardInput) {
 		if (Input.GetKey(KeyCode.F)) {
 			deltaZoom = 1.0f;
-		} 
+		}
 		if (Input.GetKey(KeyCode.R)) {
 			deltaZoom = -1.0f;
-		} 
+		}
 	}
 	if (useMouseInput) {
 		var scroll : float = Input.GetAxis("Mouse ScrollWheel");
@@ -177,7 +195,7 @@ private function UpdatePosition() {
 
 	transform.position = cameraTarget;
 	transform.Translate(Vector3.back * currentCameraDistance);
-	
+
 	if (adaptToTerrainHeight && terrain != null) {
 		transform.position.y = Mathf.Max(terrain.SampleHeight(transform.position) + terrain.transform.position.y + 10.0f, transform.position.y);
 	}
