@@ -27,6 +27,7 @@ public class StrateCamC : MonoBehaviour
     public bool correctZoomingOutRatio = true;
     public bool smoothing = true;
     public bool allowDoubleClickMovement = false;
+    private float doubleClickTimeWindow = 0.3f;
 
     public bool allowScreenEdgeMovement = true;
     public int screenEdgeSize = 10;
@@ -50,6 +51,7 @@ public class StrateCamC : MonoBehaviour
         currentCameraDistance = minZoomDistance + ((maxZoomDistance - minZoomDistance) / 2.0f);
         lastMousePos = Vector3.zero;
         doubleClickDetector = gameObject.AddComponent<DoubleClickDetectorC>();
+        doubleClickDetector.doubleClickTimeWindow = doubleClickTimeWindow;
     }
 
     // Update is called once per frame
