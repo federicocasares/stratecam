@@ -17,12 +17,11 @@ namespace UnityEngine.Extensions
         /// <param name="z"></param>
         public static void SetLocalEulerAngles(this Transform transform, float? x = null, float? y = null, float? z = null)
         {
-            var newVector = new Vector3();
-            var oldVector = transform.localEulerAngles;
-            newVector.x = x != null ? x.Value : oldVector.x;
-            newVector.y = y != null ? y.Value : oldVector.y;
-            newVector.z = z != null ? z.Value : oldVector.z;
-            transform.localEulerAngles = newVector;
+            var vector = new Vector3();
+            if (x != null) { vector.x = x.Value; }
+            if (y != null) { vector.y = y.Value; }
+            if (z != null) { vector.z = z.Value; }
+            transform.localEulerAngles = vector;
         }
 
         /// <summary>
@@ -34,12 +33,11 @@ namespace UnityEngine.Extensions
         /// <param name="z"></param>
         public static void SetPosition(this Transform transform, float? x = null, float? y = null, float? z = null)
         {
-            var newVector = new Vector3();
-            var oldVector = transform.position;
-            newVector.x = x != null ? x.Value : oldVector.x;
-            newVector.y = y != null ? y.Value : oldVector.y;
-            newVector.z = z != null ? z.Value : oldVector.z;
-            transform.position = newVector;
+            var vector = new Vector3();
+            if (x != null) { vector.x = x.Value; }
+            if (y != null) { vector.y = y.Value; }
+            if (z != null) { vector.z = z.Value; }
+            transform.position = vector;
         }
     }
 }
