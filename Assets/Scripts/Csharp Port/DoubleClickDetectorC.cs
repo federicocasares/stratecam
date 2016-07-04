@@ -5,6 +5,7 @@ public class DoubleClickDetectorC : MonoBehaviour {
 
     private int numberOfClicks = 0;
 	private float timer = 0.0f;
+    public float doubleClickTimeWindow = 0.3f;
 	
 	public bool IsDoubleClick()
     {
@@ -18,7 +19,7 @@ public class DoubleClickDetectorC : MonoBehaviour {
     {
         timer += Time.deltaTime;
 
-        if (timer > 0.3f)
+        if (timer > doubleClickTimeWindow)
         {
             numberOfClicks = 0;
         }
