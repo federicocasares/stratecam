@@ -18,9 +18,9 @@ namespace UnityEngine.Extensions
         public static void SetLocalEulerAngles(this Transform transform, float? x = null, float? y = null, float? z = null)
         {
             var vector = new Vector3();
-            if (x != null) { vector.x = x.Value; }
-            if (y != null) { vector.y = y.Value; }
-            if (z != null) { vector.z = z.Value; }
+            if (x != null) { vector.x = x.Value; } else { vector.x = transform.localEulerAngles.x; }
+            if (y != null) { vector.y = y.Value; } else { vector.y = transform.localEulerAngles.y; }
+            if (z != null) { vector.z = z.Value; } else { vector.z = transform.localEulerAngles.z; }
             transform.localEulerAngles = vector;
         }
 
@@ -34,9 +34,9 @@ namespace UnityEngine.Extensions
         public static void SetPosition(this Transform transform, float? x = null, float? y = null, float? z = null)
         {
             var vector = new Vector3();
-            if (x != null) { vector.x = x.Value; }
-            if (y != null) { vector.y = y.Value; }
-            if (z != null) { vector.z = z.Value; }
+            if (x != null) { vector.x = x.Value; } else { vector.x = transform.position.x; }
+            if (y != null) { vector.y = y.Value; } else { vector.y = transform.position.y; }
+            if (z != null) { vector.z = z.Value; } else { vector.z = transform.position.z; }
             transform.position = vector;
         }
     }
